@@ -9,8 +9,17 @@ module Lita
         create_schedule
       end
 
-      route(/doitnow/) do
+      route(/hazme una pregunta de finanzas/i, command: true) do
         refresh
+      end
+
+      route(/en qué pregunta vamos\?/i, command: true) do |response|
+        response.reply("Vamos en la número #{redis.get('current_trainer_question')}")
+      end
+
+      route(/muévete a la pregunta ([\d]+)/i, command: true) do |response|
+        redis.set('current_trainer_question', response.matches[0][0])
+        response.reply("Ok, entonces vamos en la número #{redis.get('current_trainer_question')}")
       end
 
       def post_question(n)
