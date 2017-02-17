@@ -22,6 +22,10 @@ module Lita
         response.reply("Ok, entonces vamos en la número #{redis.get('current_trainer_question')}")
       end
 
+      route(/dime la respuesta porfa/i, command:true) do |response|
+        response.reply("La respuesta correcta es la #{answer(current_question)}")
+      end
+
       def post_question(n)
         s = Services::SpreadsheetService.new("1xeU8acXFj5i7f9Nog-c1zcx7kcWKAIoiHIDprw2WP_U")
         message = s.read_row(n, 1).to_s
@@ -33,9 +37,18 @@ module Lita
         robot.send_message(Source.new(room: "#fintual-industria"), message)
       end
 
+      def answer(n)
+        s = Services::SpreadsheetService.new("1xeU8acXFj5i7f9Nog-c1zcx7kcWKAIoiHIDprw2WP_U")
+        s.read_row(n, 6).to_s
+      end
+
       def refresh
-        redis.set('current_trainer_question', redis.get('current_trainer_question').to_i + 1)
-        post_question(redis.get('current_trainer_question').to_i)
+        redis.set('current_trainer_question', current_question + 1)
+        post_question(current_question)
+      end
+
+      def current_question
+        redis.get('current_trainer_question').to_i
       end
 
       def create_schedule

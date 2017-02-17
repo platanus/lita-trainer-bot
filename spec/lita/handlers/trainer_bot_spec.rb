@@ -10,4 +10,9 @@ describe Lita::Handlers::TrainerBot, lita_handler: true do
     send_command("muévete a la pregunta 5", as: carl)
     expect(replies.last).to eq("Ok, entonces vamos en la número 5")
   end
+  it "knows the right answer" do
+    send_command("muévete a la pregunta 2", as: carl)
+    send_command("dime la respuesta porfa", as: carl)
+    expect(replies.last).to eq("La respuesta correcta es la d")
+  end
 end
