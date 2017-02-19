@@ -38,7 +38,7 @@ module Lita
         message = spreadsheet.read_row(n, 1).to_s
         message += "\n"
         4.times do |d|
-          message += "#{(d + 97).chr}) #{s.read_row(n, d + 2)}"
+          message += "#{(d + 97).chr}) #{spreadsheet.read_row(n, d + 2)}"
           message += "\n"
         end
         robot.send_message(Source.new(room: "#fintual-industria"), message)
@@ -53,7 +53,7 @@ module Lita
       end
 
       def spreadsheet
-        @sp = Services::SpreadsheetService.new("1xeU8acXFj5i7f9Nog-c1zcx7kcWKAIoiHIDprw2WP_U")
+        @sp ||= Services::SpreadsheetService.new("1xeU8acXFj5i7f9Nog-c1zcx7kcWKAIoiHIDprw2WP_U")
       end
 
       def refresh
