@@ -22,13 +22,20 @@ module Lita
         response.reply("Ok, entonces vamos en la número #{redis.get('current_trainer_question')}")
       end
 
-      route(/dime la respuesta porfa/i, command:true) do |response|
+      route(/dime la respuesta porfa/i, command: true) do |response|
         response.reply("La respuesta correcta es la #{answer(current_question)}")
       end
 
+      route(/es la ([a-d]+)\?/i, command: true) do |response|
+        if check(current_question, response.matches[0][0])
+          response.reply("Sí! la #{response.matches[0][0]}!")
+        else
+          response.reply("No compadre.")
+        end
+      end
+
       def post_question(n)
-        s = Services::SpreadsheetService.new("1xeU8acXFj5i7f9Nog-c1zcx7kcWKAIoiHIDprw2WP_U")
-        message = s.read_row(n, 1).to_s
+        message = spreadsheet.read_row(n, 1).to_s
         message += "\n"
         4.times do |d|
           message += "#{(d + 97).chr}) #{s.read_row(n, d + 2)}"
@@ -38,8 +45,15 @@ module Lita
       end
 
       def answer(n)
-        s = Services::SpreadsheetService.new("1xeU8acXFj5i7f9Nog-c1zcx7kcWKAIoiHIDprw2WP_U")
-        s.read_row(n, 6).to_s
+        spreadsheet.read_row(n, 6).to_s
+      end
+
+      def check(question, guess)
+        answer(question) == guess
+      end
+
+      def spreadsheet
+        @sp = Services::SpreadsheetService.new("1xeU8acXFj5i7f9Nog-c1zcx7kcWKAIoiHIDprw2WP_U")
       end
 
       def refresh

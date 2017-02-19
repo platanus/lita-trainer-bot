@@ -15,4 +15,9 @@ describe Lita::Handlers::TrainerBot, lita_handler: true do
     send_command("dime la respuesta porfa", as: carl)
     expect(replies.last).to eq("La respuesta correcta es la d")
   end
+  it "evaluates an answer" do
+    send_command("muévete a la pregunta 2", as: carl)
+    send_command("es la d?", as: carl)
+    expect(replies.last).to eq("Sí! la d!")
+  end
 end
