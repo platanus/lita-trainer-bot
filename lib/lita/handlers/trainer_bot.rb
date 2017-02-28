@@ -66,7 +66,7 @@ module Lita
       end
 
       def create_schedule
-        redis.set('current_trainer_question', 1)
+        redis.set('current_trainer_question', 1) unless redis.get('current_trainer_question')
         scheduler = Rufus::Scheduler.new
         scheduler.cron(ENV['TRAINER_QUESTION_CRON']) do
           refresh
