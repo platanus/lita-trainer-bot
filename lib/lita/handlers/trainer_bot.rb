@@ -41,7 +41,7 @@ module Lita
           message += "#{(d + 97).chr}) #{spreadsheet.read_row(n, d + 2)}"
           message += "\n"
         end
-        robot.send_message(Source.new(room: "#fintual-industria"), message)
+        robot.send_message(Source.new(room: "#fintual-training"), message)
       end
 
       def answer(n)
